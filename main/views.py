@@ -63,26 +63,26 @@ def form(request):
                 guardian_contact = guardian_contact
             )
 
-            # send_mail(
-            #     subject = 'New Leave Form Entry',
-            #     message = render_to_string('msg.html',
-            #         {
-            #             "roll_number" : roll_number,
-            #             "full_name" : full_name,
-            #             "faculty" : faculty,
-            #             "semester" : semester,
-            #             "start_date" : start_date,
-            #             "end_date" : end_date,
-            #             "reason" : reason,
-            #             "leave_type" : leave_type,
-            #             "student_mail" : student_mail,
-            #             "guardian_contact" : guardian_contact,
-            #             "date" : datetime.now()
-            #         }),
-            #     from_email = 'mail4rms@gmail.com',
-            #     recipient_list = [student_mail],
-            #     fail_silently=True,
-            # )
+            send_mail(
+                subject = 'New Leave Form Entry',
+                message = render_to_string('msg.html',
+                    {
+                        "roll_number" : roll_number,
+                        "full_name" : full_name,
+                        "faculty" : faculty,
+                        "semester" : semester,
+                        "start_date" : start_date,
+                        "end_date" : end_date,
+                        "reason" : reason,
+                        "leave_type" : leave_type,
+                        "student_mail" : student_mail,
+                        "guardian_contact" : guardian_contact,
+                        "date" : datetime.now()
+                    }),
+                from_email = 'mail4rms@gmail.com',
+                recipient_list = [student_mail],
+                fail_silently=True,
+            )
         except Exception as e:
             print("========== FORM ERROR ==========")
             print(type(e).__name__)
