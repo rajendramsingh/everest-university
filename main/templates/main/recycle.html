@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Current Leave Requests-->
+<section id="leave-status" class="py-5">
+<div class="container">
+    <div class="row mt-5">
+
+        <div id="timer">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{message.tags}} text-center fs-6">
+                        {{message}}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <script>
+            setTimeout(function()
+        {
+            var time = document.getElementById('timer')
+            if (time){
+                time.style.display = 'none';
+            }
+        },3000)
+        </script>
+        <h3 class="alert alert-success text-center" mt-1>RECYCLE BIN</h3>
+        <div class="text-start">
+            <a href="{% url 'restore_all' %}" class="btn btn-primary">
+                <i class="fa-solid fa-trash-arrow-up me-1"></i>
+                Restore all
+            </a>
+        </div>
+        <div class="col-10 mx-auto">
+            <table class="table table-striped-columns">
+                <thead>
+                    <tr>
+                        <th scope="col">S.No</th>
+                        <th scope="col">Roll Number</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Faculty</th>
+                        <th scope="col">Semester</th>
+                        <th scope="col">Leave Type</th>
+                        <th scope="col">Reason</th>
+                        <th scope="col">Start Date</th>
+                        <th scope="col">End Date</th>
+                        <th scope="col">Operations</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for leave in student_leave %}
+                        <tr>
+                            <th>{{leave.id}}</th>
+
+                            <td>{{leave.roll_number}}</td>
+                            <td>{{leave.full_name}}</td>
+                            <td>{{leave.faculty}}</td>
+                            <td>{{leave.semester}}</td>
+                            <td>{{leave.leave_type}}</td>
+                            <td>{{leave.reason}}</td>
+                            <td>{{leave.start_date}}</td>
+                            <td>{{leave.end_date}}</td>
+                            <td class="d-flex gap-2">
+                                <a href="{% url 'restore' leave.id %}">
+                                    <button type="button" class="btn btn-primary">
+                                        <i class="fa-solid fa-trash-arrow-up"></i> Restore
+                                    </button>
+                                </a>
+                                <a href="{% url 'delete_hard' leave.id %}">
+                                    <button type="button" class="btn btn-danger">
+                                        <i class="fa-sharp fa-solid fa-delete-left"></i>Delete</button>
+                                </a>
+                            </td>
+
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</section>
+
+
+{% endblock %}

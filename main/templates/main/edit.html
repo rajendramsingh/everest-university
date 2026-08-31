@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="alert alert-success text-center">Update details</h1>
+
+<div class="row">
+    <div class="col-2"></div>
+    <div class="col-8">
+        <form method="POST" action="{% url 'edit' data.id %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="exampleInputRollNumber1" class="form-label">Roll Number</label>
+                <input type="number" value= "{{data.roll_number}}" name="roll_number" class="form-control" id="roll_number">
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputFullName1" class="form-label">Full Name</label>
+                <input type="text" value="{{data.full_name}}" name="full_name" class="form-control" id="full_name">
+            </div>
+            <div class="mb-3">
+                <label for="faculty" class="form-label">Faculty</label>
+                <select name="faculty" id="faculty" class="form-select">
+                    <option value="" disabled
+                        {% if not data.faculty %}selected{% endif %}>
+                        Select Your Faculty
+                    </option>
+                    <option value="Computer Engineering"
+                        {% if data.faculty == "Computer Engineering" %}selected{% endif %}>
+                        Computer Engineering
+                    </option>
+                    <option value="Medicine"
+                        {% if data.faculty == "Medicine" %}selected{% endif %}>
+                        Medicine
+                    </option>
+                    <option value="Electrical Engineering"
+                        {% if data.faculty == "Electrical Engineering" %}selected{% endif %}>
+                        Electrical Engineering
+                    </option>
+                    <option value="Artificial Intelligence"
+                        {% if data.faculty == "Artificial Intelligence" %}selected{% endif %}>
+                        Artificial Intelligence
+                    </option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Semester</label>
+                <input type="number" value="{{data.semester}}" name="semester" class="form-control" id="semester">
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Email address</label>
+                <input type="email" value="{{data.student_mail}}"" name="student_mail" class="form-control" id="student_mail" aria-describedby="emailHelp">
+                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputGuardianContact" class="form-label">Guardian Phone number</label>
+                <input type="number" value="{{data.guardian_contact}}" name="guardian_contact" class="form-control" id="guardian_contact">
+            </div>
+            <div class="mb-3">
+                <label for="leave_type" class="form-label">Leave Type</label>
+                <select name="leave_type" id="leave_type" class="form-select">
+                    <option value="" disabled 
+                        {% if not data.leave_type %}selected{% endif %}>
+                        Select Any
+                    </option>
+                    <option value="Medical" 
+                        {% if data.leave_type == "Medical" %}selected{% endif %}>
+                    </option>> 
+                        Medical
+                    </option>
+                    <option value="Family"
+                        {% if data.leave_type == "Family" %}selected{% endif %}>
+                        Family
+                    </option>
+                    <option value="Academic"
+                        {% if data.leave_type == "Academic" %}selected{% endif %}>
+                        Academic
+                    </option> 
+                    <option value="Others"
+                        {% if data.leave_type == "Others" %}selected{% endif %}>
+                        Others 
+                    </option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Reason for leave</label>
+                <textarea name="reason" class="form-control" id="reason">{{data.reason}}</textarea>
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputStartDate" class="form-label">Leave Start Date</label>
+                <input type="date" value="{{data.start_date|date:'Y-m-d'}}" name="start_date" class="form-control" id="start_date">
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputEndDate" class="form-label">Leave End Date</label>
+                <input type="date" value="{{data.end_date|date:'Y-m-d'}}" name="end_date" class="form-control" id="end_date">
+            </div>
+            <button type="submit" class="btn btn-primary">Update</button>
+        </form>
+    </div>
+    <div class="col-2"></div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="alert alert-success text-center">Please fill out this form for the leave application</h1>
+
+<div class="row">
+    <div class="col-2"></div>
+    <div class="col-8">
+        <form method="POST" action="{% url 'form' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="exampleInputRollNumber1" class="form-label">Roll Number</label>
+                <input type="number" name="roll_number" class="form-control" id="roll_number">
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputFullName1" class="form-label">Full Name</label>
+                <input type="text" name="full_name" class="form-control" id="full_name">
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputFaculty1" class="form-label">Faculty</label>
+                <select name="faculty" id="faculty">
+                    <option value="" disabled selected> Select Your Faculty</option>
+                    <option> Computer Engineering</option>
+                    <option> Medicine</option>
+                    <option> Electrical Engineering </option>
+                    <option> Artificial Intelligence </option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Semester</label>
+                <input type="number" name="semester" class="form-control" id="semester">
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Email address</label>
+                <input type="email" name="student_mail" class="form-control" id="student_mail" aria-describedby="emailHelp">
+                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputGuardianContact" class="form-label">Guardian Phone number</label>
+                <input type="number" name="guardian_contact" class="form-control" id="guardian_contact">
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Leave Type</label>
+                <select name="leave_type" id="leave_type">
+                    <option value="" disabled selected> Select Any</option>
+                    <option> Medical</option>
+                    <option> Family</option>
+                    <option> Academic </option>
+                    <option> Others </option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Reason for leave</label>
+                <textarea name="reason" class="form-control" id="reason"> </textarea>
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputStartDate" class="form-label">Leave Start Date</label>
+                <input type="date" name="start_date" class="form-control" id="start_date">
+            </div>
+            <div class="mb-3">
+                <label for="exampleInputEndDate" class="form-label">Leave End Date</label>
+                <input type="date" name="end_date" class="form-control" id="end_date">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+    <div class="col-2"></div>
+</div>
+
+
+<!-- Current Leave Requests-->
+<section id="leave-status" class="py-5">
+<div class="container">
+    <div class="row mt-5">
+
+        <div id="timer">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{message.tags}} text-center fs-6">
+                        {{message}}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <script>
+            setTimeout(function()
+        {
+            var time = document.getElementById('timer')
+            if (time){
+                time.style.display = 'none';
+            }
+        },3000)
+        </script>
+        <h3 class="alert alert-success text-center" mt-1>Current Student Leave Requests</h3>
+        <div class="text-end">
+            <a href="{% url 'clear_all' %}" class="btn btn-danger">
+                <i class="fa-sharp fa-solid fa-delete-left"></i>
+                Delete all
+            </a>
+        </div>
+        <div class="col-10 mt-3 mx-auto">
+            <table class="table table-striped-columns">
+                <thead>
+                    <tr>
+                        <th scope="col">S.No</th>
+                        <th scope="col">Roll Number</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Faculty</th>
+                        <th scope="col">Semester</th>
+                        <th scope="col">Leave Type</th>
+                        <th scope="col">Reason</th>
+                        <th scope="col">Start Date</th>
+                        <th scope="col">End Date</th>
+                        <th scope="col">Operations</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for leave in student_leave %}
+                        <tr>
+                            <th>{{ forloop.counter }}</th>
+
+                            <td>{{leave.roll_number}}</td>
+                            <td>{{leave.full_name}}</td>
+                            <td>{{leave.faculty}}</td>
+                            <td>{{leave.semester}}</td>
+                            <td>{{leave.leave_type}}</td>
+                            <td>{{leave.reason}}</td>
+                            <td>{{leave.start_date}}</td>
+                            <td>{{leave.end_date}}</td>
+                            <td class="d-flex gap-2">
+                                <a href="{% url 'edit' leave.id %}">
+                                    <button type="button" class="btn btn-primary">
+                                        <i class="fa-solid fa-pen-to-square"></i>Edit</button>
+                                </a>
+                                <a href="{% url 'delete_entry' leave.id %}">
+                                    <button type="button" class="btn btn-danger">
+                                        <i class="fa-sharp fa-solid fa-delete-left"></i>Delete</button>
+                                </a>
+                            </td>
+
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="d-flex justify-content-center mt-4">
+            {% if student_leave.paginator.num_pages > 1 %}
+                {% for page in student_leave.paginator.page_range %}
+                    {% if student_leave == student_leave.number %}
+                        <a href="?page={{page}}#leave_status" class="btn btn-primary">
+                            {{page}}
+                        </a>
+                    {% else %}
+                        <a href="?page={{page}}#leave-status" class="btn btn-outline-primary mx-1">
+                            {{page}}
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="d-flex justify-content-end">
+            <a href="{% url 'recycle' %}" class="mx-5 px-10">
+                <button class="btn btn-warning">
+                    <i class="fa-solid fa-recycle"></i> Recycle
+                </button>
+            </a>
+        </div>
+    </div>
+</div>
+</section>
+
+{% endblock %}
