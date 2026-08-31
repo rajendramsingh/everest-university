@@ -6,6 +6,8 @@ from django.db.models import Q
 from django.core.paginator import Paginator
 from django.core.mail import send_mail, EmailMessage
 from django.template.loader import render_to_string
+from django.conf import settings
+from django.core.mail import send_mail
 
 # Create your views here.
 def home(request):
@@ -64,24 +66,29 @@ def form(request):
             )
 
             send_mail(
-                subject = 'New Leave Form Entry',
-                message = render_to_string('msg.html',
-                    {
-                        "roll_number" : roll_number,
-                        "full_name" : full_name,
-                        "faculty" : faculty,
-                        "semester" : semester,
-                        "start_date" : start_date,
-                        "end_date" : end_date,
-                        "reason" : reason,
-                        "leave_type" : leave_type,
-                        "student_mail" : student_mail,
-                        "guardian_contact" : guardian_contact,
-                        "date" : datetime.now()
-                    }),
-                from_email = 'mail4rms@gmail.com',
-                recipient_list = [student_mail],
-                fail_silently=True,
+                # subject = 'New Leave Form Entry',
+                # message = render_to_string('msg.html',
+                #     {
+                        # "roll_number" : roll_number,
+                        # "full_name" : full_name,
+                        # "faculty" : faculty,
+                        # "semester" : semester,
+                        # "start_date" : start_date,
+                        # "end_date" : end_date,
+                        # "reason" : reason,
+                        # "leave_type" : leave_type,
+                        # "student_mail" : student_mail,
+                        # "guardian_contact" : guardian_contact,
+                        # "date" : datetime.now()
+                        'Test email',
+                        'This is a test from my Render Django application.',
+                        settings.EMAIL_HOST_USER,
+                        [settings.EMAIL_HOST_USER],
+                        fail_silently=False,
+                    # }),
+                # from_email = settings.EMAIL_HOST_USER,
+                # recipient_list = [student_mail],
+                # fail_silently=True,
             )
         except Exception as e:
             print("========== FORM ERROR ==========")
