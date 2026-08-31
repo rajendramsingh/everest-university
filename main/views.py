@@ -84,9 +84,11 @@ def form(request):
                 fail_silently=True,
             )
         except Exception as e:
-            return render(request, 'main/form.html', {
-                'student_leave':student_leave
-            })
+            print("========== FORM ERROR ==========")
+            print(type(e).__name__)
+            print(str(e))
+            print("================================")
+            raise
 
         #send_mail(subject, message,from_email,recipient_list, fail_silently=True)
 
