@@ -38,50 +38,56 @@ def edit(request, id):
 
 def form(request):
     if request.method == 'POST':
-        roll_number = request.POST.get('roll_number')
-        full_name = request.POST.get('full_name')
-        faculty = request.POST.get('faculty')
-        semester = request.POST.get('semester')
-        start_date = request.POST.get('start_date')
-        end_date = request.POST.get('end_date')
-        reason = request.POST.get('reason')
-        leave_type = request.POST.get('leave_type')
-        student_mail = request.POST.get('student_mail')
-        guardian_contact = request.POST.get('guardian_contact')
+        try:
+            roll_number = request.POST.get('roll_number')
+            full_name = request.POST.get('full_name')
+            faculty = request.POST.get('faculty')
+            semester = request.POST.get('semester')
+            start_date = request.POST.get('start_date')
+            end_date = request.POST.get('end_date')
+            reason = request.POST.get('reason')
+            leave_type = request.POST.get('leave_type')
+            student_mail = request.POST.get('student_mail')
+            guardian_contact = request.POST.get('guardian_contact')
 
-        StudentLeave.objects.create(
-            roll_number = roll_number,
-            full_name = full_name,
-            faculty = faculty,
-            semester = semester,
-            start_date = start_date,
-            end_date = end_date,
-            reason = reason,
-            leave_type =leave_type,
-            student_mail = student_mail,
-            guardian_contact = guardian_contact
-        )
+            StudentLeave.objects.create(
+                roll_number = roll_number,
+                full_name = full_name,
+                faculty = faculty,
+                semester = semester,
+                start_date = start_date,
+                end_date = end_date,
+                reason = reason,
+                leave_type =leave_type,
+                student_mail = student_mail,
+                guardian_contact = guardian_contact
+            )
 
-        send_mail(
-            subject = 'New Leave Form Entry',
-            message = render_to_string('msg.html',
-                {
-                    "roll_number" : roll_number,
-                    "full_name" : full_name,
-                    "faculty" : faculty,
-                    "semester" : semester,
-                    "start_date" : start_date,
-                    "end_date" : end_date,
-                    "reason" : reason,
-                    "leave_type" : leave_type,
-                    "student_mail" : student_mail,
-                    "guardian_contact" : guardian_contact,
-                    "date" : datetime.now()
-                }),
-            from_email = 'mail4rms@gmail.com',
-            recipient_list = [student_mail],
-            fail_silently=True,
-        )
+            send_mail(
+                subject = 'New Leave Form Entry',
+                message = render_to_string('msg.html',
+                    {
+                        "roll_number" : roll_number,
+                        "full_name" : full_name,
+                        "faculty" : faculty,
+                        "semester" : semester,
+                        "start_date" : start_date,
+                        "end_date" : end_date,
+                        "reason" : reason,
+                        "leave_type" : leave_type,
+                        "student_mail" : student_mail,
+                        "guardian_contact" : guardian_contact,
+                        "date" : datetime.now()
+                    }),
+                from_email = 'mail4rms@gmail.com',
+                recipient_list = [student_mail],
+                fail_silently=True,
+            )
+        except Exception as e:
+            return render(request, 'main/form.html', {
+                'student_leave':student_leave
+            })
+
         #send_mail(subject, message,from_email,recipient_list, fail_silently=True)
 
         messages.success(request, f"{full_name}, your form has been submitted!!!")
